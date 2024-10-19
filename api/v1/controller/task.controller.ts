@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Task } from "../../../models/task.model";
+import paginationHelper from "../../../helpers/pagination";
 
 export const index  = async(req : Request, res : Response) => {
     //Ham tim kiem
@@ -21,7 +22,18 @@ export const index  = async(req : Request, res : Response) => {
         
     }
     // End sap xep
-    const tasks = await Task.find(find).sort(sort);
+    //Pagination
+    let initPagination = {
+        limitItem: 2,
+        currentPage: 1
+    }
+    const countTasks = await Task.countDocuments(find);
+    const objectPagination = paginationHelper(initPagination, req.query, countTasks)
+    //End Pagination
+    const tasks = await Task.find(find)
+            .sort(sort)
+            .skip(objectPagination.skip)
+            .limit(objectPagination.limitItem);
  
     res.json(tasks);
 }
