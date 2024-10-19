@@ -82,7 +82,7 @@ export const changeStatus = async(req : Request, res : Response) => {
     }
 }
 //[PATCH] /api/v1/tasks/change-multi
-export const changeMulti = async (req, res) => {
+export const changeMulti = async (req : Request, res : Response) => {
     try {
         const ids : string[] = req.body.ids;
         const key : string = req.body.key;
@@ -126,6 +126,43 @@ export const changeMulti = async (req, res) => {
         res.json({
             code: 400,
             message: "Không tồn tại!"
+        })
+    }
+}
+
+//[POST] /api/v1/tasks/create
+export const create = async (req : Request, res : Response) => {
+    try {
+        const product = new Task(req.body);
+        const data = await product.save();
+        
+        res.json({
+            code: 200,
+            message: "Tạo thành công !!",
+            data : data
+        })
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Error!!!"
+        })
+    }
+}
+//[PATCH] /api/v1/tasks/edit/:id
+export const edit = async (req : Request, res : Response) => {
+    try {
+        const id = req.params.id;
+        await Task.updateOne({
+            _id: id
+        }, req.body);
+        res.json({
+            code: 200,
+            message: "Cập nhật thành công"
+        })
+    }  catch {
+        res.json({
+            code: 400,
+            message: "Lỗi!"
         })
     }
 }
