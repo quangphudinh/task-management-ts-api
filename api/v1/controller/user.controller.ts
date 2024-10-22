@@ -33,41 +33,41 @@ export const register = async (req : Request, res : Response) => {
         }
 }
 
-// //[POST] /api/v1/users/login
-// module.exports.login = async (req, res) => {
-//     const email = req.body.email;
-//     const password = req.body.password;
+//[POST] /api/v1/users/login
+export const login = async (req : Request, res : Response) => {
+    const email : string = req.body.email;
+    const password : string = req.body.password;
 
-//     const user = await User.findOne({
-//         email: email,
-//         deleted: false
-//     })
+    const user = await User.findOne({
+        email: email,
+        deleted: false
+    })
 
-//     if (!user) {
-//         res.json({
-//             code: 400,
-//             message: 'Email khong tồn tại'
-//         });
-//         return;
-//     }
+    if (!user) {
+        res.json({
+            code: 400,
+            message: 'Email khong tồn tại'
+        });
+        return;
+    }
 
-//     if (md5(password) !== user.password) {
-//         res.json({
-//             code: 400,
-//             message: 'Mật khẩu không đúng'
-//         });
-//         return;
-//     }
+    if (md5(password) !== user.password) {
+        res.json({
+            code: 400,
+            message: 'Mật khẩu không đúng'
+        });
+        return;
+    }
 
-//     const token = user.token;
-//     res.cookie('token', token);
+    const token = user.token;
+    res.cookie('token', token);
 
-//     res.json({
-//         code: 200,
-//         message: 'Đăng nhập thành công',
-//         token : token
-//     });
-// }
+    res.json({
+        code: 200,
+        message: 'Đăng nhập thành công',
+        token : token
+    });
+}
 
 // //[POST] /api/v1/users/password/forgot
 // module.exports.forgotPassword = async (req, res) => {
@@ -172,14 +172,19 @@ export const register = async (req : Request, res : Response) => {
 
 // }
 
-// //[GET] /api/v1/users/detail
-// module.exports.detail = async (req, res) => {
-//     res.json({
-//         code: 200,
-//         message: 'Lấy thông tin thành công',
-//         user : req.user
-//     });
-// }
+//[GET] /api/v1/users/detail
+export const detail = async (req : Request, res : Response) => {
+    const  id : string = req.params.id;
+    const user = await User.findOne({
+        _id: id,
+        deleted: false
+    }).select("-password -token");
+    res.json({
+        code: 200,
+        message: 'Lấy thông tin thành công',
+        infor : user
+    });
+}
 
 // //[GET] /api/v1/users/list
 // module.exports.list = async (req, res) => {
