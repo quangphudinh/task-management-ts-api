@@ -1,8 +1,8 @@
 import {Express} from 'express';
-import * as express from 'express';
+import express = require('express');
 import * as database from './config/database';
 import * as dotenv from 'dotenv';
-import * as cors from 'cors';
+import cors from 'cors';
 import mainV1Routes from './api/v1/routes/index.route';
 
 dotenv.config();
